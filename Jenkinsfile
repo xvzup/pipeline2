@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Init') {
       steps {
-        withKubeConfig(contextName: 'internal', credentialsId: '0026c120-8c5a-42d3-9b3c-2996408f9273') {
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''echo "Preparing environment ..."
 
 if [ `kubectl get cm | grep spark-code | wc -l` -eq 1 ]; then
@@ -21,7 +21,7 @@ fi
     }
     stage('Build') {
       steps {
-        withKubeConfig(contextName: 'internal', credentialsId: '0026c120-8c5a-42d3-9b3c-2996408f9273') {
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''#!/bin/bash
 
 echo "Create Spark application code"
@@ -33,7 +33,7 @@ kubectl get cm spark-code'''
     }
     stage('Deploy to Kubernetes') {
       steps {
-        withKubeConfig(credentialsId: '0026c120-8c5a-42d3-9b3c-2996408f9273', contextName: 'internal') {
+        withKubeConfig(credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589', contextName: 'c2.fra.k8scluster.de') {
           sh '''#!/bin/bash
 
 kubectl apply -f bigdata_job.yaml
@@ -55,7 +55,7 @@ done '''
     }
     stage('Check Results') {
       steps {
-        withKubeConfig(contextName: 'internal', credentialsId: '0026c120-8c5a-42d3-9b3c-2996408f9273') {
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''#!/bin/bash
 
 kubectl logs -l=job-name=bigdata
