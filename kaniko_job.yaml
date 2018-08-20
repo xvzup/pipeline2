@@ -5,16 +5,6 @@ metadata:
 spec:
   template:
     spec:
-      initContainers:
-      - name: copycontext
-        image: busybox
-        command: ["sh", "-c"]
-        args: ["cp /input/* /context; chmod +x /context/*.py"]
-        volumeMounts:
-          - name: kaniko-context
-            mountPath: /context
-          - name: context-input
-            mountPath: /input
       containers:
       - name: kaniko
         image: gcr.io/kaniko-project/executor:latest
@@ -35,7 +25,4 @@ spec:
         - name: kaniko-context
           persistentVolumeClaim:
             claimName: kaniko
-        - name: context-input
-          configMap:
-            name: context-input
   backoffLimit: 1
