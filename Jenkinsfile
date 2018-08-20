@@ -80,4 +80,7 @@ kubectl delete job bigdata'''
       }
     }
   }
+  environment {
+    DESTINATION = 'andperu/spark'
+  }
 }
