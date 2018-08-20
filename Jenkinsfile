@@ -24,9 +24,24 @@ fi
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''#!/bin/bash
 
-echo "Create Spark application code"
-kubectl create cm spark-code --from-file=sparkTest.py
-kubectl get cm spark-code'''
+echo "Configuring kaniko_job.yaml"
+
+sed -i "s#--destination=index.docker.io/andperu/hello_world#--destination=index.docker.io/${DESTINATION}:${BUILD_NUMBER}#" kaniko_job.yaml
+
+kubectl apply -f kaniko_job.yaml
+
+while true; do
+  kubectl get pod -a -l=job-name=kaniko
+  STATE=`kubectl get pod -a -l=job-name=kaniko | tail -1 | awk \'{print $3}\'`
+  if [ "$STATE" = "Completed" ]; then
+    echo "Build done. Printing log"
+    kubectl logs -l=job-name=kaniko
+    break
+  fi
+  sleep 5
+done
+
+'''
         }
 
       }
