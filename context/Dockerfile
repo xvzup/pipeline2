@@ -5,7 +5,7 @@ FROM fokkodriesprong/docker-pyspark:latest
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY sparkTest.py /app/sparkTest.py
+COPY . /app
 
 # Update pip
 RUN pip install --upgrade pip
