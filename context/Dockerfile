@@ -13,6 +13,9 @@ RUN pip install --upgrade pip
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
+# Download data
+RUN curl -LO https://raw.githubusercontent.com/xvzup/pipeline2/master/context/message.csv 
+
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
