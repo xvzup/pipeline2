@@ -13,7 +13,7 @@ if [ `kubectl get cm | grep context-input | wc -l` -eq 1 ]; then
 fi
 
 echo "Creating build-context"
-kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/sparkTest.py --from-file=context/requirements.txt
+kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/sparkTest.py --from-file=context/requirements.txt --from-file=context/message.csv
           
 if [ `kubectl get job | grep kaniko | wc -l` -eq 1 ]; then
   kubectl delete job kaniko
