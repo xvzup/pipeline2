@@ -14,7 +14,7 @@ spec:
       containers:
       - command: ["sh","-c"]
         args: ["cp /sparkcode/sparkTest.py /app/; python sparkTest.py"]
-        image: 100.125.0.198:20202/vw-test1234/bigdataspark:latest
+        image: andi123:first-try
         imagePullPolicy: Always
         name: bigdata
         resources: {}
@@ -24,8 +24,6 @@ spec:
           - name: sparkcode
             mountPath: /sparkcode
       dnsPolicy: ClusterFirst
-      imagePullSecrets:
-      - name: default-secret
       restartPolicy: OnFailure
       schedulerName: default-scheduler
       securityContext: {}
