@@ -26,11 +26,11 @@ df = sqlContext.read.load("message.csv", format="csv", sep=",", inferSchema="tru
 # possible code correction: switch from "trip_id" to "vin"
 #######################################
 
-df.groupBy("trip_id").count().show()
+df.groupBy("vin").count().show()
 
-df_pandas = df.groupBy("trip_id").count().toPandas()
+df_pandas = df.groupBy("vin").count().toPandas()
 df_pandas = df_pandas.iloc[1:8,] # select first 8 rows
-data = [go.Bar(x=df_pandas["trip_id"], y=df_pandas["count"])]
+data = [go.Bar(x=df_pandas["vin"], y=df_pandas["count"])]
 print("Writing plot to outputPlot.html")
 offline.plot(data, filename='outputPlot.html')
 
