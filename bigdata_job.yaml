@@ -13,25 +13,15 @@ spec:
     spec:
       containers:
       - command: ["sh","-c"]
-        args: ["cp /sparkcode/sparkTest.py /app/; python sparkTest.py"]
+        args: ["python sparkTest.py"]
         image: andperu/spark:XXX
         imagePullPolicy: Always
         name: bigdata
         resources: {}
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
-        volumeMounts:
-          - name: sparkcode
-            mountPath: /sparkcode
       dnsPolicy: ClusterFirst
       restartPolicy: OnFailure
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      volumes:
-      - name: sparkcode
-        configMap:
-          name: spark-code
-          items:
-            - key: sparkTest.py
-              path: sparkTest.py
