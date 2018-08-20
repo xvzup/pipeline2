@@ -6,10 +6,6 @@ pipeline {
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''echo "Preparing environment ..."
 
-if [ `kubectl get cm | grep spark-code | wc -l` -eq 1 ]; then
-  kubectl delete cm spark-code
-fi
-
 if [ `kubectl get job | grep bigdata | wc -l` -eq 1 ]; then
   kubectl delete job bigdata
 fi
@@ -28,6 +24,7 @@ echo "Configuring kaniko_job.yaml"
 
 sed -i "s#--destination=index.docker.io/andperu/hello_world#--destination=index.docker.io/${DESTINATION}:${BUILD_NUMBER}#" kaniko_job.yaml
 
+cat kaniko_job.yaml
 kubectl apply -f kaniko_job.yaml
 
 while true; do
