@@ -6,6 +6,15 @@ pipeline {
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''echo "Preparing environment ..."
 
+echo "Checking for build-context"
+if [ `kubectl get cm | grep context-input | wc -l` -eq 1 ]; then
+  echo "Deleting build-context"
+  kubectl delete cm context-input
+fi
+
+echo "Creating build-context"
+kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/sparkTest.py
+          
 if [ `kubectl get job | grep kaniko | wc -l` -eq 1 ]; then
   kubectl delete job kaniko
 fi
