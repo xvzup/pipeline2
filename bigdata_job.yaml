@@ -14,7 +14,7 @@ spec:
       containers:
       - command: ["sh","-c"]
         args: ["cp /sparkcode/sparkTest.py /app/; python sparkTest.py"]
-        image: andi123/first-try
+        image: andperu/spark:XXX
         imagePullPolicy: Always
         name: bigdata
         resources: {}

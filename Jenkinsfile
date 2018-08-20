@@ -19,16 +19,13 @@ fi
 
       }
     }
-    stage('Build') {
+    stage('Build with Kaniko') {
       steps {
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''#!/bin/bash
 
 echo "Configuring kaniko_job.yaml"
-
 sed -i "s#--destination=index.docker.io/andperu/hello_world#--destination=index.docker.io/${DESTINATION}:${BUILD_NUMBER}#" kaniko_job.yaml
-
-cat kaniko_job.yaml
 kubectl apply -f kaniko_job.yaml
 
 while true; do
@@ -52,10 +49,11 @@ done
         withKubeConfig(credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589', contextName: 'c2.fra.k8scluster.de') {
           sh '''#!/bin/bash
 
+echo "Preparing bigdata_job ..."
+sed -i "s#andperu/spark:XXX#andperu/spark:${BUILD_NUMBER}#" bigdata_job.yaml
 kubectl apply -f bigdata_job.yaml
 
 while true; do
-
   if [ `kubectl get pods -a -l=job-name=bigdata | grep -v \\^NAME | awk \'{print $3}\'` = "Completed" ]; then
     echo "Job finished "
     break
@@ -63,7 +61,6 @@ while true; do
     kubectl get pods -a -l=job-name=bigdata
     sleep 5
   fi
-
 done '''
         }
 
